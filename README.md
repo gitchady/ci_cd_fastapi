@@ -7,7 +7,8 @@
 - `app/main.py` - маленькое FastAPI API.
 - `tests/test_main.py` - тесты API.
 - `Dockerfile` - сборка Docker image.
-- `.github/workflows/ci-cd.yml` - GitHub Actions pipeline.
+- `.github/workflows/ci.yml` - CI pipeline.
+- `.github/workflows/cd.yml` - CD pipeline.
 
 ## Локальный запуск
 
@@ -37,9 +38,9 @@ docker build -t fastapi-ci-cd-demo .
 docker run --rm -p 8000:8000 fastapi-ci-cd-demo
 ```
 
-## Как работает CI/CD
+## Как работает CI
 
-Pipeline находится в `.github/workflows/ci-cd.yml`.
+CI pipeline находится в `.github/workflows/ci.yml`.
 
 При `push` или `pull_request` в ветку `main`:
 
@@ -49,7 +50,12 @@ Pipeline находится в `.github/workflows/ci-cd.yml`.
 4. Запускает тесты.
 5. Собирает Docker image.
 
-После успешного CI на `push` в `main` запускается учебный CD job:
+## Как работает CD
+
+CD pipeline находится в `.github/workflows/cd.yml`.
+
+Он запускается через `workflow_run` после завершения workflow `CI` на ветке `main`.
+Если CI завершился успешно, запускается учебный deploy job:
 
 ```text
 Deploying fastapi-ci-cd-demo to staging...
